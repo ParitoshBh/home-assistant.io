@@ -28,7 +28,7 @@ Project ID:
     required: true
     type: string
 API key:
-    description: "The api key should have `execution.write` and `health.read` scopes."
+    description: "The api key should have `execution.write` and `health.read` scopes. `health.read` is needed to validate credentials during initial setup."
     required: true
     type: string
 {% endconfiguration_basic %}
