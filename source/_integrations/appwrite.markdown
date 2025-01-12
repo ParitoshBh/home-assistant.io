@@ -14,7 +14,7 @@ ha_integration_type: integration
 
 With the **Appwrite** {% term integration %}, you can execute functions in your self-hosted Appwrite instance or their cloud offering.
 
-The integration provides an action in the format `appwrite.execute_function_<instance_id>` which can be used to trigger functions. Multiple Appwrite instances are supported, but each must have a unique project ID in your Home Assistant configuration.
+The integration provides an action for each available function in the format `appwrite.<instance_id>_<function_id>` (function_id is slugified) which can be used to trigger a function. Multiple Appwrite instances are supported, but each must have a unique project ID in your Home Assistant configuration.
 
 {% include integrations/config_flow.md %}
 
@@ -28,7 +28,7 @@ Project ID:
     required: true
     type: string
 API key:
-    description: "The api key should have `execution.write` and `health.read` scopes. `health.read` is needed to validate credentials during initial setup."
+    description: "The api key should have `functions.read`, `execution.write` and `health.read` scopes. `health.read` is needed to validate credentials during initial setup."
     required: true
     type: string
 {% endconfiguration_basic %}
@@ -42,14 +42,14 @@ For more information:
 
 ```yaml
 # Basic example
-action: appwrite.execute_function_1234560
+action: appwrite.1234560_my_function_id
 data:
   function_id: "send_notification"  # Required: The function's ID in Appwrite
   function_method: "POST"          # Optional: HTTP method (default: GET)
   function_body: '{"message": "Motion detected in garage"}'  # Optional: Function body
 
 # Advanced example with all options
-action: appwrite.execute_function_0987654
+action: appwrite.0987654_my_function_id_2
 data:
   function_id: "process_image"
   function_body: '{"image_url": "https://example.com/image.jpg"}'   # Optional: Function body
@@ -60,6 +60,10 @@ data:
   function_async: true          # Optional: Run asynchronously (default: false)
   function_method: "POST"       # Optional: HTTP method (default: GET)
 ```
+
+## Identifying New Functions
+
+Since the integration doesn't actively poll, as such it'll not know on its own if new function is available. However, reloading the integration should automatically generate service for new function.
 
 ## Remove integration
 
